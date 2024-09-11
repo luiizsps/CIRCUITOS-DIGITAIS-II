@@ -6,11 +6,12 @@ module produto (
   output reg [2:0] C);
   
   wire [2:0] D;
-  assign D = 2'd2*A;
-  assign C = D - B;
+  //assign D = 2'd2*A;
+  //assign C = D - B;
   
   always @ (*) begin
-  	c = D - B;
+    D = 2'd2*A;
+  	C = D - B;
   end
 
 endmodule
