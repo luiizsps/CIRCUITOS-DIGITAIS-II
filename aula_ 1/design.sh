@@ -10,9 +10,10 @@ module produto (
   wire [2:0] D; // wire é utilizado junto ao assign
   assign D = 2'd2*A;
   //assign C = D - B;
+  //assign C = module ? D + B : D - B; ternary operator
   
-  always @ (*) begin // always simula um multiplexador, aqui a ordem do código importa
-    if(mode ==0)
+  always @ (*) begin
+    if(mode == 0)
       C = D - B;
     else
       C = D + B;
