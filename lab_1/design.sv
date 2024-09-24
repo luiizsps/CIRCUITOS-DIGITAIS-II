@@ -3,9 +3,9 @@ module soma (
   input wire [2:0] B,
   output wire [5:0] C
 );
-
-  assign C = {3'b000, (A + B)};
-  
+   
+  assign C = A + B;
+    
 endmodule
 
 module subtracao (
@@ -15,9 +15,9 @@ module subtracao (
 );
   always @(*) begin
     if (A < B)
-      C = {3'b000, (B - A)};
+      C = (B - A);
     else
-      C = {3'b000, (A - B)};
+      C = (A - B);
   end
 endmodule
 
@@ -75,6 +75,32 @@ module bcd_p_7seg (
 
 endmodule
 
+module display (
+  input wire [5:0] result,
+  input wire [1:0] sel,
+  output wire [6:0] seg_0,
+  output wire [6:0] seg_1
+);
+  wire [3:0] unidade, dezena;
+  
+  separa_digitos sep_dig_u0(
+    .result(result),
+    .sel(sel),
+    .unidade(unidade),
+    .dezena(dezena)
+  );
+  
+  bcd_p_7seg display_7seg_unidades(
+    .bcd(unidade),
+    .seg(seg_0)
+  );
+
+  bcd_p_7seg display_7seg_dezenas(
+    .bcd(dezena),
+    .seg(seg_1)
+  );
+endmodule
+
 module separa_digitos (
   input wire [5:0] result,
   input wire [1:0] sel,
@@ -82,10 +108,11 @@ module separa_digitos (
   output reg [3:0] dezena
 );
   always @(*) begin
-    if (sel == 2'b11) begin
+    if (sel == 2'b11)begin
       unidade = result[2:0]; // quociente
       dezena = result[5:3];  // resto
-    end else begin
+    end 
+    else begin
       dezena = result / 10;
       unidade = result % 10;
     end
