@@ -5,6 +5,7 @@ module teste();
   wire [5:0] result;
   wire [3:0] unidade, dezena;
   wire [6:0] display_unidades, display_dezenas;
+  reg [3:0] soma;
 
   calculadora calc_u1(
     .A(A),
@@ -12,29 +13,19 @@ module teste();
     .sel(seletor),
     .result(result)
   );
-
-  separa_digitos sep_dig_u1(
+  
+  display display_u0 (
     .result(result),
-    .sel(seletor),
-    .unidade(unidade),
-    .dezena(dezena)
-  );
-
-  bcd_p_7seg display_7seg_unidades(
-    .bcd(unidade),
-    .seg(display_unidades)
-  );
-
-  bcd_p_7seg display_7seg_dezenas(
-    .bcd(dezena),
-    .seg(display_dezenas)
+	.sel(seletor),
+    .seg_0(display_unidades),
+    .seg_1(display_dezenas)
   );
 
   initial begin
     
-    A = 3'd7; 
-    B = 3'd2; 
-
+    A = 3'd6;
+    B = 3'd7;
+   
     seletor = 2'b00;
     #10; 
     $display("Soma: A=%d, B=%d, Resultado=%d", A, B, result);
