@@ -3,8 +3,9 @@ module soma (
   input wire [2:0] B,
   output wire [5:0] C
 );
-   
-  assign C = A + B;
+  reg [3:0] temp;
+  assign temp = A + B;
+  assign C = {2'b00, temp};
     
 endmodule
 
@@ -13,12 +14,14 @@ module subtracao (
   input wire [2:0] B,
   output reg [5:0] C
 );
+  reg [3:0] temp;
   always @(*) begin
     if (A < B)
-      C = (B - A);
+      temp = (B - A);
     else
-      C = (A - B);
+      temp = (A - B);
   end
+  assign C = {2'b00, temp};
 endmodule
 
 
