@@ -28,7 +28,7 @@ module contador (
         if (!rst_n)
             cont <= 4'd0;
         else begin
-          if(cont < 4'd10)
+            if(cont < 4'd9)
             cont <= cont + 4'd1;
           else
             cont <= 4'd0;
