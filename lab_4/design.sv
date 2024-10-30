@@ -5,7 +5,7 @@ module divisor_de_clock (
     input rst_n,
     output wire clk_div
 );
-  	reg [10:0] cont;
+  reg [2:0] cont;
   
     always @ (posedge clk or negedge rst_n) begin
         if (!rst_n)
@@ -14,7 +14,7 @@ module divisor_de_clock (
             cont <= cont + 1;
     end
 
-  assign clk_div = cont[10];
+  assign clk_div = cont[2];
 
 endmodule
 
@@ -80,45 +80,67 @@ module fsm_moore (
   output reg OPEN,
   output reg ERROR
 );
-  reg S0, S1, E1;
+  parameter S0 = 3'b000,
+  			S1 = 3'b001,
+  			S2 = 3'b010,
+  			E1 = 3'b011,
+  			E2 = 3'b100;
+  			
+  reg current_state, next_state;
   
-  always @(posedge clk_div or negedge rst_n) begin
-    if (!rst_n) begin
-      S0 <= 1;
-      S1 <= 0;
-      E1 <= 0;
-      OPEN <= 0;
-      ERROR <= 0;
+  always @ (posedge clk_div or negedge rst_n)
+	begin: state_memory
+   if (!rst_n)
+      current_state <= S0;
+   else
+      current_state <= next_state;
     end
-    else if (sinc_enter) begin
-      if (S0) begin
-        S0 <= 0;
-        if (keyB == 0 && keyA == 1)
-          S1 <= 1;
-        else
-          E1 <= 1;
-      end
-      else if (S1) begin
-        S1 <= 0;
-        if (keyB == 1 && keyA == 0)
-          OPEN <= 1;
-        else
-          ERROR <= 1;
-      end
-      else if (E1) begin
-        E1 <= 0;
-        ERROR <= 1;
-      end
-      else if (ERROR) begin
-        ERROR <= 0;
-        S0 <= 1;
-      end
-    end
-    
-    if (OPEN) begin
-      OPEN <= 0;
-      S0 <= 1;
-    end
-  end
+  
+  always @ (current_state or sinc_enter)
+	begin: next_state_logic
+   case (current_state)
+      S0:
+        if (sinc_enter == 1’b1) begin
+          if(keyA == 1 && keyB == 0)
+          	next_state = S1;
+          else
+            next_state = E1;
+        end
+        else next_state = S0;
+      S1:
+        if (sinc_enter == 1’b1) begin
+          if(keyA == 0 && keyB == 1)
+          	next_state = S2;
+          else
+            next_state = E2;
+        end
+        else next_state = S1;
+      E1:
+        if (sinc_enter == 1’b1)
+          next_state = E2;
+        else 
+          next_state = E1;
+     
+      default: next_state = S0;
+   endcase   
+	end
+  
+  always @ (current_state or sinc_enter)
+	begin: OUTPUT_LOGIC
+   case (current_state)
+      S0:
+        OPEN = 0’b1;
+    	ERROR = 0’b0;
+      S1:
+        OPEN = 0’b1;
+    	ERROR = 0’b0;
+     	S2
+         default : begin
+            Open_CW = 1’b0;
+            Close_CCW = 1’b0; end
+   endcase
+	end
 endmodule
+
+
     	
