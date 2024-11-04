@@ -5,7 +5,7 @@ module divisor_de_clock (
     input rst_n,
     output wire clk_div
 );
-  reg [2:0] cont;
+  reg [10:0] cont;
   
     always @ (posedge clk or negedge rst_n) begin
         if (!rst_n)
@@ -14,7 +14,7 @@ module divisor_de_clock (
             cont <= cont + 1;
     end
 
-  assign clk_div = cont[2];
+  assign clk_div = cont[10];
 
 endmodule
 
@@ -22,32 +22,23 @@ module sincronizador_enter_clock (
   input clk_div,
   input enter,
   input rst_n,
-  output reg sinc_enter
+  output wire sinc_enter
 );
   reg registrador_1, registrador_2;
-  
-  always @(posedge enter or negedge rst_n) begin
-    if (!rst_n)
-      registrador_1 <= 0;
-    else
-      registrador_1 <= 1;
-  end
   
   always @(posedge clk_div or negedge rst_n) begin
     if (!rst_n)
       begin
     	sinc_enter <= 0;
+		registrador_1 <= 0;
     	registrador_2 <= 0;
       end
     else
       begin
+		registrador_1 <= enter;
     	registrador_2 <= registrador_1;
-    	sinc_enter <= registrador_1 && !registrador_2;
+    	sinc_enter <= registrador_1 & ~registrador_2;
       end
-    
-    if(sinc_enter)
-      registrador_1 <= 0;
-    
   end
   
 endmodule
