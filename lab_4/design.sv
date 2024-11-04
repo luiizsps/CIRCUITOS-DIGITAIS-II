@@ -86,7 +86,7 @@ module fsm_moore (
   			E1 = 3'b011,
   			E2 = 3'b100;
   			
-  reg current_state, next_state;
+  reg [2:0] current_state, next_state;
   
   always @ (posedge clk_div or negedge rst_n)
 	begin: state_memory
@@ -96,51 +96,49 @@ module fsm_moore (
       current_state <= next_state;
     end
   
-  always @ (current_state or sinc_enter)
-	begin: next_state_logic
-   case (current_state)
-      S0:
-        if (sinc_enter == 1’b1) begin
-          if(keyA == 1 && keyB == 0)
-          	next_state = S1;
-          else
-            next_state = E1;
-        end
-        else next_state = S0;
-      S1:
-        if (sinc_enter == 1’b1) begin
-          if(keyA == 0 && keyB == 1)
-          	next_state = S2;
-          else
+  always @ (*)
+	begin
+     case (current_state)
+        S0:
+          if (sinc_enter == 1'b1) begin
+            if(keyA == 1 && keyB == 0)
+              next_state = S1;
+            else
+              next_state = E1;
+          end
+          else next_state = S0;
+        S1:
+          if (sinc_enter == 1'b1) begin
+            if(keyA == 0 && keyB == 1)
+              next_state = S2;
+            else
+              next_state = E2;
+          end
+          else next_state = S1;
+        E1:
+          if (sinc_enter == 1'b1)
             next_state = E2;
-        end
-        else next_state = S1;
-      E1:
-        if (sinc_enter == 1’b1)
-          next_state = E2;
-        else 
-          next_state = E1;
-     
-      default: next_state = S0;
-   endcase   
+          else 
+            next_state = E1;
+       	E2:
+          if (sinc_enter == 1'b1)
+            next_state = S0;
+          else
+            next_state = E2;   
+        default: next_state = S0;
+     endcase   
 	end
   
-  always @ (current_state or sinc_enter)
-	begin: OUTPUT_LOGIC
-   case (current_state)
-      S0:
-        OPEN = 0’b1;
-    	ERROR = 0’b0;
-      S1:
-        OPEN = 0’b1;
-    	ERROR = 0’b0;
-     	S2
-         default : begin
-            Open_CW = 1’b0;
-            Close_CCW = 1’b0; end
-   endcase
-	end
+  always @(*) begin
+    OPEN = 1'b0;
+    ERROR = 1'b0;
+    case (current_state)
+      S2: OPEN = 1'b1;
+      E2: ERROR = 1'b1;
+      default: begin
+        OPEN = 1'b0;
+        ERROR = 1'b0;
+      end
+    endcase
+  end
 endmodule
-
-
-    	
