@@ -22,7 +22,7 @@ module sincronizador_enter_clock (
   input clk_div,
   input enter,
   input rst_n,
-  output wire sinc_enter
+  output reg sinc_enter
 );
   reg registrador_1, registrador_2;
   
