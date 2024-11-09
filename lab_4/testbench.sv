@@ -21,20 +21,20 @@ module fsm;
     keyA = 0;
     keyB = 0;
     enter = 0;
-    @(negedge clk);
+	repeat(10) @(negedge clk);
     rst_n = 1;
     
     keyA = 1;
     keyB = 0;
     enter = 1;
-    @(negedge clk);
+    repeat(10) @(negedge clk);
     enter = 0;
     repeat(100) @(negedge clk);
 
     keyA = 0;
     keyB = 1;
     enter = 1;
-    @(negedge clk);
+    repeat(10) @(negedge clk);
     enter = 0;
     repeat(100) @(negedge clk);
 	// OPEN = 1
@@ -42,14 +42,14 @@ module fsm;
     keyA = 1;
     keyB = 1;
     enter = 1;
-    @(negedge clk);
+    repeat(10) @(negedge clk);
     enter = 0;
     repeat(100) @(negedge clk);
     
     keyA = 1;
     keyB = 1;
     enter = 1;
-    @(negedge clk);
+    repeat(10) @(negedge clk);
     enter = 0;
     repeat(100) @(negedge clk);
 	// ERROR = 1
