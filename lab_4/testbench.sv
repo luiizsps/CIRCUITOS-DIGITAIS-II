@@ -55,7 +55,7 @@ module fsm;
 	// ERROR = 1
     
     enter = 1;
-    @(negedge clk);
+    repeat(10) @(negedge clk);
     enter = 0;
     repeat(100) @(negedge clk);
     
