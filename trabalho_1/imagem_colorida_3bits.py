@@ -1,0 +1,113 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPmuCiJN1P93KOieiOxaB/m",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/luiizsps/CIRCUITOS-DIGITAIS-II/blob/main/trabalho_1/imagem_colorida_3bits.py\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "jlZQ1x9JpGD-"
+      },
+      "outputs": [],
+      "source": [
+        "from PIL import Image\n",
+        "import numpy as np"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def convert_image_to_txt(image_path, output_path):\n",
+        "    # Carregar a imagem\n",
+        "    image = Image.open(image_path).convert(\"RGB\")\n",
+        "    image = image.resize((640, 480))\n",
+        "    pixels = image.load()\n",
+        "\n",
+        "    # Tamanho da imagem\n",
+        "    width, height = image.size\n",
+        "\n",
+        "    with open(output_path, \"w\") as txt_file:\n",
+        "        for y in range(height):\n",
+        "            for x in range(width):\n",
+        "                # Obter os valores RGB\n",
+        "                r, g, b = pixels[x, y]\n",
+        "\n",
+        "                # Converter cada componente em 1 bit (0 ou 1 baseado em threshold 128)\n",
+        "                r_bit = '1' if r >= 128 else '0'\n",
+        "                g_bit = '1' if g >= 128 else '0'\n",
+        "                b_bit = '1' if b >= 128 else '0'\n",
+        "\n",
+        "                # Escrever no arquivo como \"RGB\" (3 bits por linha)\n",
+        "                txt_file.write(f\"{r_bit}{g_bit}{b_bit}\\n\")\n",
+        "\n",
+        "    print(f\"Arquivo '{output_path}' gerado com sucesso!\")"
+      ],
+      "metadata": {
+        "id": "QhI45hnbqbiv"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Caminho da imagem de entrada e do arquivo de saída\n",
+        "image_path = \"mario.jpg\"  # Substitua pelo caminho da sua imagem\n",
+        "output_path = \"mario_n.txt\"\n",
+        "\n",
+        "# Converter a imagem\n",
+        "convert_image_to_txt(image_path, output_path)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "mb04eqDWqfNO",
+        "outputId": "caa7bc01-b440-4d80-eddc-258b0b561e72"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Arquivo 'mario_n.txt' gerado com sucesso!\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "DejXaS16uNrZ"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
