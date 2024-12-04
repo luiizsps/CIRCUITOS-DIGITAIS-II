@@ -6,3 +6,5 @@ O trabalho consiste no desenvolvimento de um jogo semelhante ao Enduro do Atari.
 
 ## DIAGRAMA DE BLOCOS
 ![Flowchart(6)](https://github.com/user-attachments/assets/2931a2e8-e57e-41a6-89b9-5a01d3ecb1a8)
+![Flowchart(7)](https://github.com/user-attachments/assets/dd57630d-217e-4714-b567-8381da5deb8b)
+
